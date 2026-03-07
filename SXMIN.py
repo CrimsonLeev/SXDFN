@@ -101,13 +101,7 @@ class SEBlock(nn.Module):
         # scale: 通道加权
         return x * y.expand_as(x)
 
-class SXMIN(torch.nn.Module):
-    """
-    A PoseRegressor is comprised of a pretrained backbone model that extracts features
-    from an input X-ray and two linear layers that decode these features into rotational
-    and translational camera pose parameters, respectively.
-    """
-
+class SXDIN(torch.nn.Module):
     def __init__(
         self,
         model_name = "renet18",
@@ -169,12 +163,7 @@ class SXMIN(torch.nn.Module):
             input_convention=self.convention,
         )
 
-class SXMIN_test(torch.nn.Module):
-    """
-    A PoseRegressor is comprised of a pretrained backbone model that extracts features
-    from an input X-ray and two linear layers that decode these features into rotational
-    and translational camera pose parameters, respectively.
-    """
+class SXDIN_test(torch.nn.Module):
 
     def __init__(
         self,
@@ -252,7 +241,6 @@ N_ANGULAR_COMPONENTS = {
     "quaternion_adjugate": 10,
 }
 
-# %% ../notebooks/api/03_registration.ipynb 11
 from diffdrr.detector import make_xrays
 from diffdrr.drr import DRR
 from diffdrr.siddon import siddon_raycast
@@ -309,7 +297,7 @@ class SparseRegistration(torch.nn.Module):
 
     def forward(self, n_patches=None, patch_size = None):
         # Parse initial density
-        if not hasattr(self.drr, "density"):#设置骨密度
+        if not hasattr(self.drr, "density"):
             self.drr.set_bone_attenuation_multiplier(
                 self.drr.bone_attenuation_multiplier
             )
@@ -319,7 +307,6 @@ class SparseRegistration(torch.nn.Module):
             self.patch_size = patch_size
 
         # Make the mask for sparse rendering
-        #如果patch的数量为0则设置一个全是true的模板
         if self.n_patches is None:
             mask = torch.ones(
                 1,
