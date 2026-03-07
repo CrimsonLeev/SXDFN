@@ -84,30 +84,6 @@ class Registration:
         self.verbose = verbose
         self.down = nn.MaxPool2d(2)
 
-    def initialize_registration(self, img):
-        #with torch.no_grad():
-        self.model.train()
-        pred_pose, y, rotation, translation = self.model(img, self.imgx)
-        #pred_pose = self.isocenter_pose.compose(offset)
-
-        return pred_pose, rotation, translation
-
-    def initialize_optimizer(self, rotation, translation):
-
-        optimizer = torch.optim.Adam(
-            [
-                {"params": [rotation], "lr": 3e-2},
-                {"params": [translation], "lr": 3e0
-                 },
-            ],
-            maximize=True,
-        )
-        scheduler = torch.optim.lr_scheduler.StepLR(
-            optimizer,
-            step_size=25,
-            gamma=0.9,
-        )
-        return optimizer, scheduler
 
 
     def evaluate2(self, pred_pose):
@@ -127,11 +103,25 @@ class Registration:
         self.pose = pose.to(self.device)
         img_drr = self.drr(None, None, None, pose=self.pose)
         img_drr = self.transforms(img_drr).to(self.device)
-        pred_pose, rotation, translation = self.initialize_registration(img)
+
+        self.model.train()
+        pred_pose, y, rotation, translation = self.model(img, self.imgx)
 
         rotation = torch.nn.Parameter(rotation)#.to(self.device)
         translation = torch.nn.Parameter(translation)#.to(self.device)
-        optimizer, scheduler = self.initialize_optimizer(rotation, translation)
+        optimizer = torch.optim.Adam(
+            [
+                {"params": [rotation], "lr": 3e-2},
+                {"params": [translation], "lr": 3e0
+                 },
+            ],
+            maximize=True,
+        )
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer,
+            step_size=25,
+            gamma=0.9,
+        )
         self.target_registration_error = Evaluator(self.specimen, idx)
         losses = []
         times = []
@@ -296,3 +286,4 @@ def main(id_number, parameterization):
 if __name__ == "__main__":
 
     main(id_number=3,parameterization = "se3_log_map")
+
