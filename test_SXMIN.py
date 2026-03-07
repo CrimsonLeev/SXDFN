@@ -285,5 +285,6 @@ def main(id_number, parameterization):
 
 if __name__ == "__main__":
 
-    main(id_number=3,parameterization = "se3_log_map")
+    main(id_number=1,n_angular_components = 3)
+
 
