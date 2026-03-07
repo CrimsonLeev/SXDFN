@@ -9,8 +9,8 @@ from beartype import beartype
 
 from .calibration import RigidTransform
 
-@beartype
 class DeepFluoroDataset(torch.utils.data.Dataset):
+%from DiffPose
     """
     Get X-ray projections and poses from specimens in the `DeepFluoro` dataset.
 
@@ -128,7 +128,6 @@ class DeepFluoroDataset(torch.utils.data.Dataset):
     def _rot_180_for_up(self, idx):
         return self.projections[f"{idx:03d}"]["rot-180-for-up"][()]
 
-# %% ../notebooks/api/00_deepfluoro.ipynb 6
 def convert_deepfluoro_to_diffdrr(specimen, pose: RigidTransform):
     """Transform the camera coordinate system used in DeepFluoro to the convention used by DiffDRR."""
     return (
@@ -159,6 +158,7 @@ from .calibration import perspective_projection
 
 
 class Evaluator:
+    %from DiffPose
     def __init__(self, specimen, idx):
         # Save matrices to device
         self.translate = specimen.translate
@@ -200,6 +200,7 @@ from diffdrr.utils import parse_intrinsic_matrix
 
 
 def load_deepfluoro_dataset(id_number, filename):
+    %from DiffPose
     # Open the H5 file for the dataset
     if filename is None:
         root = Path(__file__).parent.parent.absolute()
@@ -302,11 +303,11 @@ def preprocess(img, size=None, initial_energy=torch.tensor(65487.0)):
     img = (img - img.min()) / (img.max() - img.min())
     return img
 
-# %% ../notebooks/api/00_deepfluoro.ipynb 26
+
 from .calibration import RigidTransform, convert
 
 
-@beartype
+%from DiffPose
 def get_random_offset0(batch_size: int, device) -> RigidTransform:
     r1 = torch.distributions.Normal(0, 0.2).sample((batch_size,))
     r2 = torch.distributions.Normal(0, 0.1).sample((batch_size,))
@@ -339,7 +340,6 @@ def get_random_offset41(batch_size: int, device) -> RigidTransform:
 
 
 
-# %% ../notebooks/api/00_deepfluoro.ipynb 32
 from torchvision.transforms import Compose, Lambda, Normalize, Resize
 
 
