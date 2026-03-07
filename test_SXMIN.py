@@ -185,7 +185,7 @@ class Registration:
 
             # display pred_img in the seconde tab
             axs[1].imshow(pred_img_np, cmap="gray")
-            axs[1].set_title(tre)  # 设置标题
+            axs[1].set_title(tre)  
             axs[1].axis('off')
 
             plt.show()
@@ -218,7 +218,7 @@ class Registration:
 
             difference = img_np - pred_img_np
 
-            # dispaly error map
+            # display error map
             plt.imshow(difference, cmap='bwr', vmin=-1, vmax=1)
             plt.colorbar()
             plt.show()
@@ -286,7 +286,7 @@ def main(id_number, parameterization):
 
     mTRE_array = np.array(mTRE)
     mean_value = mTRE_array.mean()
-    variance = mTRE_array.var()
+    variance = mTRE_array.std()
     print("mTRE: ", mean_value, " +- ", variance)
     print("SMSR: ", suc / sum_num)
     print("SR: ", suc1 / sum_num)
@@ -294,4 +294,5 @@ def main(id_number, parameterization):
 
 
 if __name__ == "__main__":
+
     main(id_number=3,parameterization = "se3_log_map")
