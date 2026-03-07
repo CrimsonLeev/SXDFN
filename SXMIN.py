@@ -15,12 +15,8 @@ def convert(#from DiffPose
 
     # Convert any input parameterization to a RigidTransform
     if input_parameterization == "se3_log_map":
-        #print(000)
-        #print(transform)
         transform = torch.concat([transform[1], transform[0]], axis=-1)
-        #print(transform)
         matrix = se3_exp_map(transform).transpose(-1, -2)
-        #print(matrix)
         transform = RigidTransform(
             R=matrix[..., :3, :3],
             t=matrix[..., :3, 3],
@@ -168,16 +164,15 @@ class SXDIN_test(torch.nn.Module):
     def __init__(
         self,
         model_name,
-        parameterization,
+        n_angular_components,
         convention=None,
         pretrained=False,
         **kwargs,
     ):
         super().__init__()
 
-        self.parameterization = parameterization
         self.convention = convention
-        n_angular_components = N_ANGULAR_COMPONENTS[parameterization]
+        n_angular_components = 3
 
         # Get the size of the output from the backbone
         self.ca1 = SEBlock(channel=256, reduction=16)
