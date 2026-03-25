@@ -166,7 +166,7 @@ class Registration:
             pred_img_np = pred_img.to('cpu').detach().numpy().squeeze()
             pred_img_np2 = pred_img2.to('cpu').detach().numpy().squeeze()
             # create a figure with two tab
-            fig, axs = plt.subplots(1, 2, figsize=(12, 6))  # 1行2列的布局
+            fig, axs = plt.subplots(1, 2, figsize=(12, 6)) 
 
             # display img in the first tab
             axs[0].imshow(img_np, cmap="gray")
