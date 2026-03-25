@@ -276,8 +276,8 @@ def main(id_number, parameterization):
 
     mTRE_array = np.array(mTRE)
     mean_value = mTRE_array.mean()
-    variance = mTRE_array.std()
-    print("mTRE: ", mean_value, " +- ", variance)
+    sde = mTRE_array.std()
+    print("mTRE: ", mean_value, " +- ", sde)
     print("SMSR: ", suc / sum_num)
     print("SR: ", suc1 / sum_num)
     print("SR10:",su / sum_num)
