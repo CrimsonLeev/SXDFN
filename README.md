@@ -5,6 +5,11 @@ SXDFN is a dedicated framework for intraoperative 2D/3D registration. Leveraging
 ## SXDFN allows predicting pose based on different-dimensional images. 
 ![Network](network.png "Network")
 ## HMA allows quick adaptation to new patients
-
-
-
+![Loss](Loss.png "Comparison of Convergence Speed")
+## Setup
+### 1. Clone the repository
+```bash
+git clone https://github.com/CrimsonLeev/SXDFN.git
+cd SXDFN
+conda create -n SXDFN python=3.11
+pip install -r requirements.txt
